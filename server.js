@@ -21,7 +21,11 @@ import express from "express";
 import cors from "cors";
 
 const app = express();
-app.use(cors()); // allows your website (different port) to call this server
+app.use(cors({
+  origin: "*", // Allow all origins for testing
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
