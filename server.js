@@ -30,7 +30,17 @@ const PORT = process.env.PORT || 3001;
 const ACCOUNT_SID = "AC176c63ba7d4ae91d5fd6723ba6c969c4"; // safe to hardcode, not secret
 const AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN; // NEVER hardcode this one, NEVER send to browser
 const FROM_NUMBER = "whatsapp:+17372508034"; // your Twilio sandbox number
-const TEMPLATE_CONTENT_SID = "HXfe5ab5f00277942d4d4200328b4d403c"; // "Appointment Reminders" template
+
+// The default message that will be sent if the frontend doesn't provide one.
+const DEFAULT_MESSAGE = `Tonight's Parent Check-In ❤️ - Project CONNECT
+
+Hi! Have you done these today?
+1. Homework checked? Reply H
+2. Reading 20min? Reply R
+3. Connection talk? Reply C
+
+Just reply with letters, e.g. 'H R'`;
+
 // ------------------------
 
 if (!AUTH_TOKEN) {
@@ -45,12 +55,11 @@ if (!AUTH_TOKEN) {
 /**
  * POST /api/send-test
  * Body (optional): { "to": "+2348066143230", "message": "custom text" }
- * If "message" is omitted, sends the pre-approved template instead
- * (required for numbers that haven't messaged you in the last 24h).
  */
 app.post("/api/send-test", async (req, res) => {
   const to = req.body.to || "+2348066143230";
-  const customMessage = req.body.message; // optional
+  // Use the custom message from the frontend, OR fall back to our default check-in message
+  const messageBody = req.body.message || DEFAULT_MESSAGE;
 
   const toWhatsApp = to.startsWith("whatsapp:") ? to : `whatsapp:${to}`;
 
@@ -58,14 +67,9 @@ app.post("/api/send-test", async (req, res) => {
 
   const params = new URLSearchParams({
     To: toWhatsApp,
-    From: FROM_NUMBER
+    From: FROM_NUMBER,
+    Body: messageBody
   });
-
-  if (customMessage) {
-    params.set("Body", customMessage);
-  } else {
-    params.set("ContentSid", TEMPLATE_CONTENT_SID);
-  }
 
   try {
     const twilioRes = await fetch(url, {
