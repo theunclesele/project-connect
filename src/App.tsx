@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 // Points at your backend server. Change this after deploying to Render
 // (e.g. "https://project-connect-backend.onrender.com") — leave as
 // localhost only while running the backend on your own computer.
-const BACKEND_URL = "https://project-connect-59b5.onrender.com";
+const BACKEND_URL = "https://project-connect-5005.onrender.com";
 import { 
   Check, BookOpen, Clock, Heart, Sprout, Shield, 
   MessageCircle, ArrowRight, Play, ChevronDown, 
