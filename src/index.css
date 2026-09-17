@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* { font-family: 'Inter', system-ui, sans-serif; }
+h1,h2,h3 { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+@keyframes slideDown {
+  from { opacity:0; transform: translateY(-8px) scale(0.98); }
+  to { opacity:1; transform: translateY(0) scale(1); }
+}
